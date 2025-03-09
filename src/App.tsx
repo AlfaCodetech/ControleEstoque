@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import StockMovements from "./pages/StockMovements";
+import Suppliers from "./pages/Suppliers";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,14 @@ const App = () => (
             element={
               <Layout>
                 <StockMovements />
+              </Layout>
+            }
+          />
+          <Route
+            path="/suppliers"
+            element={
+              <Layout>
+                <Suppliers />
               </Layout>
             }
           />

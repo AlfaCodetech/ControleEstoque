@@ -1,4 +1,3 @@
-
 // Mock data for the inventory system
 
 export interface StockItem {
@@ -31,6 +30,19 @@ export interface StockSummaryItem {
   quantity: number;
   threshold: number;
   totalCapacity: number;
+}
+
+export interface Supplier {
+  id: string;
+  code: string;
+  name: string;
+  contact: string;
+  email: string;
+  phone: string;
+  address: string;
+  category: string;
+  status: "ativo" | "inativo";
+  lastOrder: string;
 }
 
 // Categories
@@ -259,6 +271,70 @@ export const STOCK_SUMMARY: StockSummaryItem[] = [
     quantity: 450,
     threshold: 100,
     totalCapacity: 500,
+  },
+];
+
+// Suppliers data
+export const SUPPLIERS: Supplier[] = [
+  {
+    id: "1",
+    code: "FOR001",
+    name: "LinhasFinas Ltda",
+    contact: "Maria Silva",
+    email: "contato@linhasfinas.com.br",
+    phone: "(11) 3456-7890",
+    address: "Rua das Linhas, 123 - São Paulo, SP",
+    category: "Linhas",
+    status: "ativo",
+    lastOrder: "2023-11-15",
+  },
+  {
+    id: "2",
+    code: "FOR002",
+    name: "TecidosPro S.A",
+    contact: "João Teixeira",
+    email: "vendas@tecidospro.com.br",
+    phone: "(11) 2345-6789",
+    address: "Av. dos Tecidos, 456 - São Paulo, SP",
+    category: "Tecidos",
+    status: "ativo",
+    lastOrder: "2023-11-20",
+  },
+  {
+    id: "3",
+    code: "FOR003",
+    name: "AcessóriosBorda Ltda",
+    contact: "Ana Pereira",
+    email: "comercial@acessoriosborda.com.br",
+    phone: "(11) 3567-8901",
+    address: "Rua Bordados, 789 - São Paulo, SP",
+    category: "Acessórios",
+    status: "ativo",
+    lastOrder: "2023-11-01",
+  },
+  {
+    id: "4",
+    code: "FOR004",
+    name: "PedrariasBrilho Ltda",
+    contact: "Carlos Souza",
+    email: "vendas@pedrariasbrilho.com.br",
+    phone: "(11) 4567-8912",
+    address: "Av. das Pedrarias, 321 - São Paulo, SP",
+    category: "Pedrarias",
+    status: "inativo",
+    lastOrder: "2023-10-25",
+  },
+  {
+    id: "5",
+    code: "FOR005",
+    name: "MáquinasBorda S.A",
+    contact: "Roberta Gomes",
+    email: "comercial@maquinasborda.com.br",
+    phone: "(11) 5678-9012",
+    address: "Rua das Máquinas, 654 - São Paulo, SP",
+    category: "Máquinas",
+    status: "ativo",
+    lastOrder: "2023-09-30",
   },
 ];
 
