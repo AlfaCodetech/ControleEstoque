@@ -2,6 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, Bell, Search } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -33,6 +34,8 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
             className="bg-background pl-8 pr-4 py-2 text-sm rounded-full border border-border/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary/30 w-[180px] lg:w-[250px] transition-all"
           />
         </div>
+        
+        <ThemeToggle />
         
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />

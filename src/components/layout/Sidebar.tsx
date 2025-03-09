@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 
 const Sidebar: React.FC = () => {
   const menuItems = [
-    { name: "Dashboard", path: "/", icon: LayoutDashboard },
+    { name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { name: "Inventário", path: "/inventory", icon: Package },
     { name: "Movimentações", path: "/stock-movements", icon: TrendingUp },
     { name: "Fornecedores", path: "/suppliers", icon: Truck },
