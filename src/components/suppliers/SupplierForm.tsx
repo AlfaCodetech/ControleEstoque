@@ -1,9 +1,7 @@
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -20,20 +18,35 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { Supplier } from "@/lib/data";
 
-// Validation schema
 const formSchema = z.object({
-  code: z.string().min(2, "Código muito curto").max(20, "Código muito longo"),
-  name: z.string().min(2, "Nome muito curto").max(100, "Nome muito longo"),
-  contact: z.string().min(2, "Nome do contato muito curto"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().min(8, "Telefone inválido"),
-  address: z.string().min(5, "Endereço muito curto"),
-  category: z.string().min(1, "Selecione uma categoria"),
-  status: z.enum(["ativo", "inativo"]),
+  name: z.string().min(2, {
+    message: "O nome deve ter pelo menos 2 caracteres.",
+  }),
+  email: z.string().email({
+    message: "Digite um e-mail válido.",
+  }),
+  phone: z.string().min(10, {
+    message: "O telefone deve ter pelo menos 10 dígitos.",
+  }),
+  category: z.string().min(1, {
+    message: "Selecione uma categoria.",
+  }),
+  address: z.string().min(5, {
+    message: "O endereço deve ter pelo menos 5 caracteres.",
+  }),
 });
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface SupplierFormProps {
   open: boolean;
@@ -50,142 +63,64 @@ const SupplierForm: React.FC<SupplierFormProps> = ({
   initialData,
   categories,
 }) => {
-  const isEditing = !!initialData?.id;
-  
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: initialData || {
-      code: "",
       name: "",
-      contact: "",
       email: "",
       phone: "",
-      address: "",
       category: "",
-      status: "ativo",
+      address: "",
     },
   });
 
-  function handleSubmit(values: z.infer<typeof formSchema>) {
+  const handleSubmit = (data: FormValues) => {
     onSubmit({
+      ...data,
       id: initialData?.id || "",
-      ...values,
       lastOrder: initialData?.lastOrder || new Date().toISOString().split('T')[0],
     });
     form.reset();
-  }
+  };
+
+  React.useEffect(() => {
+    if (initialData) {
+      form.reset(initialData);
+    } else {
+      form.reset({
+        name: "",
+        email: "",
+        phone: "",
+        category: "",
+        address: "",
+      });
+    }
+  }, [initialData, form, open]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>
-            {isEditing ? "Editar fornecedor" : "Adicionar novo fornecedor"}
+            {initialData ? "Editar Fornecedor" : "Adicionar Fornecedor"}
           </DialogTitle>
         </DialogHeader>
-        
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Código</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: FOR001" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Status</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="ativo">Ativo</SelectItem>
-                        <SelectItem value="inativo">Inativo</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome do fornecedor</FormLabel>
+                  <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: LinhasFinas Ltda" {...field} />
+                    <Input placeholder="Nome do fornecedor" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="contact"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome do contato</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: Maria Silva" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Categoria</FormLabel>
-                    <Select 
-                      onValueChange={field.onChange} 
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="email"
@@ -193,13 +128,12 @@ const SupplierForm: React.FC<SupplierFormProps> = ({
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="contato@empresa.com.br" {...field} />
+                      <Input placeholder="Email do fornecedor" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              
               <FormField
                 control={form.control}
                 name="phone"
@@ -207,14 +141,40 @@ const SupplierForm: React.FC<SupplierFormProps> = ({
                   <FormItem>
                     <FormLabel>Telefone</FormLabel>
                     <FormControl>
-                      <Input placeholder="(11) 3456-7890" {...field} />
+                      <Input placeholder="Telefone do fornecedor" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Categoria</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione uma categoria" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category} value={category}>
+                          {category}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="address"
@@ -222,23 +182,22 @@ const SupplierForm: React.FC<SupplierFormProps> = ({
                 <FormItem>
                   <FormLabel>Endereço</FormLabel>
                   <FormControl>
-                    <Input placeholder="Rua, número, bairro - cidade, estado" {...field} />
+                    <Input placeholder="Endereço do fornecedor" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
             <DialogFooter>
-              <Button 
-                type="button" 
-                variant="outline" 
+              <Button
+                type="button"
+                variant="outline"
                 onClick={() => onOpenChange(false)}
               >
                 Cancelar
               </Button>
               <Button type="submit">
-                {isEditing ? "Salvar alterações" : "Adicionar fornecedor"}
+                {initialData ? "Salvar" : "Adicionar"}
               </Button>
             </DialogFooter>
           </form>

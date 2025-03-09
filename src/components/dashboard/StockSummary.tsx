@@ -1,4 +1,3 @@
-
 import React from "react";
 import { 
   CustomCard, 
@@ -74,8 +73,7 @@ const StockSummary: React.FC<StockSummaryProps> = ({ items }) => {
                 </div>
                 <Progress 
                   value={percentage} 
-                  className="h-2" 
-                  indicatorClassName={status.color}
+                  className="h-2"
                 />
               </div>
             );

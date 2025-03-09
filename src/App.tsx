@@ -10,6 +10,8 @@ import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import StockMovements from "./pages/StockMovements";
 import Suppliers from "./pages/Suppliers";
+import Login from "./pages/Login";
+import UserRegistration from "./pages/UserRegistration";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,7 +23,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/register" element={<UserRegistration />} />
           <Route
             path="/dashboard"
             element={
