@@ -21,7 +21,7 @@ const Suppliers: React.FC = () => {
     if (data.id) {
       // Update existing supplier
       setSuppliers(suppliers.map(supplier => 
-        supplier.id === data.id ? { ...data, lastOrder: supplier.lastOrder } : supplier
+        supplier.id === data.id ? data : supplier
       ));
       toast({
         title: "Fornecedor atualizado",
@@ -32,7 +32,6 @@ const Suppliers: React.FC = () => {
       const newSupplier = {
         ...data,
         id: Math.random().toString(36).substring(2, 9),
-        lastOrder: new Date().toISOString().split('T')[0],
       };
       setSuppliers([...suppliers, newSupplier]);
       toast({
